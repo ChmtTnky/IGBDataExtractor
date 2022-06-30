@@ -16,7 +16,7 @@ To view all available flags, run the executable without any arguments through th
 
 The final output should be an RAD file containing the extracted data.
 
-To view the data, use the RAD Importer plugin for Blender 3.2 (still in development).
+To view the data, use the RAD Importer plugin for Blender 3.2 (https://github.com/ChmtTnky/RADImporter).
 
 
 # RAD Format Specification
