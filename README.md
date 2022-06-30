@@ -28,7 +28,8 @@ Users can view and edit this data manually with a generic text editor if necessa
 
 
 Skeleton Data Format:
-```SKELETON
+```
+SKELETON
 Bone Count
 Bone Name
 Bone Index
