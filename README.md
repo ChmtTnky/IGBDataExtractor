@@ -1,7 +1,7 @@
 # IGBDataExtractor
 A program that uses the Alchemy 5.0 SDK to extract data from an IGB file and export it into a format that can be imported into Blender.
 
-This program was made for the Dokapon Kingdom community (https://discord.gg/9P4DqYxVm6) to expand its modding capabilities, though it can theoretically work on files form other Alchemy based games.
+This program was made for the Dokapon Kingdom community (https://discord.gg/9P4DqYxVm6) to expand its modding capabilities, though it can theoretically work on IGB files from other Alchemy based games.
 
 Games tested on so far: Dokapon Kingdom, Project Diva
 
