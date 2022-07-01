@@ -18,31 +18,31 @@ The final output should be an RAD file containing the extracted data.
 
 To view the data, use the RAD Importer plugin for Blender 3.2 (https://github.com/ChmtTnky/RADImporter).
 
-
 # RAD Format Specification
-The RAD format is a basic text format that is soley intended to be used by the Blender plugin as an intermediary container.
+The RAD format is a binary data format containing blocks of data indentifiable by a 4 byte ID string before a given block of data.
 
-All data is in plain text and each individual value is on its own line.
-
-Users can view and edit this data manually with a generic text editor if necessary.
-
+The data is written in binary to ensure that the output matches the original data from the IGB as closely as possible.
 
 Skeleton Data Format:
 ```
-SKELETON
-Bone Count
-Bone Name
-Bone Index
-Bone Parent Index (-1 if no parent)
-Bone X translation from parent
-Bone Y translation from parent
-Bone Z translation from parent
-Bone Name
-Bone Index
-Bone Parent Index (-1 if no parent)
-Bone X translation from parent
-Bone Y translation from parent
-Bone Z translation from parent
+4 byte ID String: SKEL
+Int32: Bone Count
+
+Char8: Length of Bone Name String
+? Byte String: Bone Name
+Int32: Bone Index
+Int32: Bone Parent Index (-1 if no parent)
+Float32: Bone X translation from parent
+Float32: Bone Y translation from parent
+Float32: Bone Z translation from parent
+
+Char8: Length of Bone Name String
+? Byte String: Bone Name
+Int32: Bone Index
+Int32: Bone Parent Index (-1 if no parent)
+Float32: Bone X translation from parent
+Float32: Bone Y translation from parent
+Float32: Bone Z translation from parent
 ...
 The bone data repeats for every bone in the model
 ```
