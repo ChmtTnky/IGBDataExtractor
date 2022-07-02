@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
         }
     }
 
-    // Delete output file if it already exists
+    // Delete output file if it already exists and the data isn't being split
     std::string filename = argv[1];
     filename += "-Output.rad";
     std::fstream output;
@@ -48,8 +48,8 @@ int main(int argc, char* argv[])
     {
         output.close();
         output.open(filename, std::fstream::out);
-        output.close();
     }
+    output.close();
 
     WriteSkeleton(argv[1], split);
 }
@@ -80,25 +80,34 @@ bool WriteSkeleton(igString igb_file, igBool split)
     {
         std::string append = "-Output.rad"; // Default
         output_path += append;
-        output.open(output_path, std::fstream::out | std::ofstream::app);
+        output.open(output_path, std::fstream::out | std::ofstream::app | std::fstream::binary);
     }
     else
     {
         std::string append = "-Output-Skeleton.rad"; // Add the name of the data type to the file name
         output_path += append;
-        output.open(output_path, std::fstream::out);
+        output.open(output_path, std::fstream::out | std::fstream::binary);
     }
 
     // Get necessary skeleton data and output to file
-    output << "SKELETON" << std::endl;                    // Data identifier
-    output << skeleton->getBoneCount() << std::endl;        // Bone count
-    for (igInt i = 0; i < skeleton->getBoneCount(); i++)
+    char* identifier = "SKEL"; // 4 byte Data Identifier String
+    output.write(identifier, 4);
+    int bone_count = skeleton->getBoneCount(); // Total number of bones in skeleton
+    output.write(reinterpret_cast<char*>(&bone_count), sizeof(int));
+    for (int i = 0; i < skeleton->getBoneCount(); i++)
     {
-        output << skeleton->getBoneName(i) << std::endl;    // Bone name
-        output << i << std::endl;                           // Bone index
-        output << skeleton->getParent(i) << std::endl;      // Bone parent index
-        for (igInt j = 0; j < 3; j++)                       // Bone tail location relative to parent head (x, y, z)
-            output << std::setprecision(7) << (*skeleton->getBoneTranslation(i))[j] << std::endl;
+        std::string bone_name = skeleton->getBoneName(i); // Name of the current bone
+        char bone_name_length = bone_name.size();
+        output.write(reinterpret_cast<char*>(&bone_name_length), sizeof(char));
+        output.write(bone_name.c_str(), bone_name_length);
+        output.write(reinterpret_cast<char*>(&i), sizeof(int)); // Index of current bone
+        int parent_index = skeleton->getParent(i); // Index of parent bone
+        output.write(reinterpret_cast<char*>(&parent_index), sizeof(int));
+        for (int j = 0; j < 3; j++)
+        {
+            float value = (*skeleton->getBoneTranslation(i))[j]; // Value of x, y, and z distance in space from parent bone
+            output.write(reinterpret_cast<char*>(&value), sizeof(float));
+        }
     }
     output.close();
 
